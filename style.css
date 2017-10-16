@@ -1,0 +1,20 @@
+.main-title {
+	font-family: sans-serif;
+	text-align: center;
+	margin-top: 60px;
+	font-weight: 100;
+	letter-spacing: 5px;
+}
+
+.project {
+	margin: auto;
+	max-width: 600px;
+	margin: 100px auto;
+}
+
+.project h2 {
+	font-weight: 100;
+	font-family: sans-serif;
+	letter-spacing: 2px;
+	text-decoration: underline;
+}
