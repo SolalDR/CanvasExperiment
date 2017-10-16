@@ -1,7 +1,7 @@
 # CanvasExperiment
 
-<a href="https://github.com/SolalDR/CanvasExperiment/Particles/">Particles Canvas</a>
+<a href="https://solaldr.github.io/CanvasExperiment/Particles/">Particles Canvas</a>
 
-<a href="https://github.com/SolalDR/CanvasExperiment/Pong/">Pong</a>
+<a href="https://solaldr.github.io/CanvasExperiment/Pong/">Pong</a>
 
-<a href="https://github.com/SolalDR/CanvasExperiment/TrucChelou/">Triangle Experimentation</a>
+<a href="https://solaldr.github.io/CanvasExperiment/TrucChelou/">Triangle Experimentation</a>
