@@ -1,0 +1,27 @@
+#canvas {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translateY(-50%) translateX(-50%);
+	animation-name: rotate;
+	animation-duration: 3000;
+	animation-iteration-count: infinite;
+}
+
+#menu {
+	position: fixed;
+	right: 50px;
+	top: 50px;
+	z-index: 2;
+	background-color: white;
+	padding: 20px;
+	box-shadow: 0px 0px 15px rgba(0,0,0,.3);
+}
+
+#menu label {
+
+}
+
+#menu input {
+
+}

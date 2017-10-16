@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Canvas experiment</title>
+		<link rel="stylesheet" href="style.css">
+		<meta charset="UTF-8">
+		<style>
+
+		@keyframes rotate {
+			0% {
+				transform: translateY(-50%) translateX(-50%) rotate(0deg);
+			}
+			100% {
+				transform: translateY(-50%) translateX(-50%) rotate(360deg);
+			}
+		}
+
+		</style>
+	</head>
+	<body>
+
+		<canvas id="canvas" width="500" height="500"></canvas>
+		<div id="menu">
+			<div class="menu__item">
+				<label for="input-l">Nombre de point</label>
+				<input type="range" min="0" max="2000" id="input-l">
+			</div>
+			<div class="menu__item">
+				<label for="input-r">Rotation</label>
+				<input type="range" min="-1480" max="1480" value="360" id="input-r">
+			</div>
+			<div class="menu__item">
+				<label for="scale-min">Echelle minimum</label>
+				<input type="range" min="0" max="5" step="0.01" id="scale-min">
+			</div>
+			<div class="menu__item">
+				<label for="scale-max">Echelle maximum</label>
+				<input type="range" min="0" max="20" step="0.01"  id="scale-max">
+			</div>
+			<div class="menu__item">
+				<label for="growth-max">Diffusion maximum</label>
+				<input type="range" min="0" max="500" id="growth-max">
+			</div>
+			<div class="menu__item">
+				<label for="anim-length">Durée animation</label>
+				<input type="range" min="1000" max="10000" id="anim-length">
+			</div>
+			<div class="menu__item">
+				<label for="opacity">Opacité</label>
+				<input type="range" min="1" max="100" id="opacity">
+			</div>
+			<div>
+				<label for="">Inverse direction opacité</label>
+				<input type="checkbox" id="opacityInverse">
+			</div>
+			<div>
+				<label for="">Function d'animation</label>
+				<select name="" id="selectFunction">
+					<option value="chelou-1">Truc chelou numéro 1</option>
+					<option value="chelou-2">Truc chelou numéro 2</option>
+					<option value="chelou-3">Truc chelou numéro 3</option>
+					<option value="chelou-4">Truc chelou numéro 4</option>
+				</select>
+			</div>
+			<div>
+				<label for="Active/Desactive l'animation"></label>
+				<input type="checkbox" id="active-anim">
+			</div>
+		</div>
+		<script src="glmatrix.js"></script>
+		<script src="script.js"></script>
+	</body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Canvas experiment</title>
+		<link rel="stylesheet" href="style.css">
+		<meta charset="UTF-8">
+		<style>
+
+		@keyframes rotate {
+			0% {
+				transform: translateY(-50%) translateX(-50%) rotate(0deg);
+			}
+			100% {
+				transform: translateY(-50%) translateX(-50%) rotate(360deg);
+			}
+		}
+
+		</style>
+	</head>
+	<body>
+
+		<canvas id="canvas" width="500" height="500"></canvas>
+		
+		<script src="glmatrix.js"></script>
+		<script src="Intersect.js"></script>
+		<script src="Particle.js"></script>
+		<script src="MouseCollision.js"></script>
+		<script src="script.js"></script>
+	</body>
+</html>
