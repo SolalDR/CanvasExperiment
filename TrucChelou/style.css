@@ -18,10 +18,43 @@
 	box-shadow: 0px 0px 15px rgba(0,0,0,.3);
 }
 
-#menu label {
-
+#global-control {
+	position: fixed;
+	top: 20px;
+	right: 20px;
+	z-index: 999;
+	background-color: #444;
+	color: white; 
+	padding: 10px;
+	border-radius: 5px;
+	font-family: sans-serif;
+	font-weight: 200;
+	letter-spacing: 1px;
 }
 
-#menu input {
+#global-control .control-group {
+	margin-bottom: 20px;
+}
 
+#global-control label {
+	display: block;
+	margin-bottom: 10px;
+}
+
+#global-control label::first-letter {
+	text-transform: uppercase;
+}
+
+#global-control input {
+	display: block;
+	width: 200px;
+}
+
+#global-control input[type="text"] {
+	width: 30px;
+	display: inline-block;
+	margin-right: 20px;
+	border: 0;
+	padding: 5px;
+	border-radius: 5px;
 }
