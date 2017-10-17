@@ -141,12 +141,12 @@ Blob.prototype = {
 }
 
 blob = new Blob({
-	nbPoints: 500,
-	ampli: 100, 
-	radius: 600,
+	nbPoints: 20,
+	ampli: 50, 
+	radius: 200,
 	noise: noise,
 	point: true,
-	lineBetween: false,
+	lineBetween: true,
 	trace: 0.1,
 	colored: true
 });
