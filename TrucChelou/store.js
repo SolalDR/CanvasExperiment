@@ -1,42 +1,36 @@
 store = {
-  duration: {
-    type: 'range',
-    val: 200,
-    min: 0,
-    max: 2000
-  },
-  ridge: {
+  side: {
     type: "range",
     min: 2,
-    max: 32,
+    max: 8,
     val: 3
   },
   polygons: {
     type: "range",
     min: 1,
-    max: 1000,
+    max: 200,
     val: 100
   },
   scale: {
     min: 1,
-    max: 3
+    max: 2
   },
   rotate: {
     type: 'range',
-    min: -720,
+    min: 0,
     max: 720,
-    val: 300
+    val: 360
   },
   spread: {
     type: 'range',
     min: 0,
-    max: 100,
-    val: 0
-  },
-  opacity: {
-    type: 'range',
-    min: 0,
-    max: 1,
+    max: 300,
     val: 0
   }
+  // opacity: {
+  //   type: 'range',
+  //   min: 0,
+  //   max: 1,
+  //   val: 0
+  // }
 }

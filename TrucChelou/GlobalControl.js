@@ -2,13 +2,45 @@ function GlobalControl(selector, store, callback){
   this.callback = callback
 	this.store = store; 
   this.container = document.querySelector(selector);
+  this.hide = true; 
   if(this.container){
     this.generateControls();
   }
-  
+  this.generateHeader();
 }
 
 GlobalControl.prototype = {
+  
+  toggle: function(el, hide){
+    console.log(el)
+    if(hide && el.className.match('control-group__display')) {
+      el.className = el.className.replace('control-group__display', 'control-group__hide')
+    } else if(hide === false ) {
+      el.className = el.className.replace('control-group__hide', 'control-group__display')
+    }
+  },
+  
+  generateHeader: function(){
+    var button = document.createElement('button');
+    button.className = 'button-control button-control__hide';
+    var self = this;
+    var groups = this.container.querySelectorAll('.control-group');
+    button.addEventListener('click', function(){
+      self.hide = self.hide ? false : true; 
+      this.className = self.hide ? 'button-control button-control__hide' : 'button-control button-control__display'
+      console.log(groups)
+      for(i=0; i<groups.length; i++) {
+        (function(){
+          var r = i;
+          setTimeout(function(){
+            self.toggle(groups[r], self.hide);  
+          }, i*50)
+        })();
+      }
+    }, false)
+    this.container.appendChild(button);
+  },
+
   generateControls: function(){
     for(param in this.store) {
       this.generateControl(param);
@@ -34,7 +66,7 @@ GlobalControl.prototype = {
     var param = this.store[paramS];
     var els = [];
     var container = document.createElement('div'); 
-    container.className = "control-group"; 
+    container.className = "control-group control-group__hide"; 
     
     var label = document.createElement("label");
     label.innerHTML = (param.name) ? param.name : paramS

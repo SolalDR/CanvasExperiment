@@ -23,22 +23,63 @@
 	top: 20px;
 	right: 20px;
 	z-index: 999;
-	background-color: #444;
 	color: white; 
-	padding: 10px;
 	border-radius: 5px;
 	font-family: sans-serif;
 	font-weight: 200;
 	letter-spacing: 1px;
+	padding-top: 70px;
 }
 
+#global-control .button-control {
+	width: 45px;
+	height: 45px;
+	background-color: black;
+	float: right;
+	border-radius: 10px;
+	border: 0;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: 30px;
+	position: absolute;
+	top: 0; 
+	right: 0; 
+	transition: all .4s;
+}
+
+#global-control .button-control__hide {
+	background-image: url("menu.svg");
+	background-size: 20px;
+}
+#global-control .button-control__display {
+	background-image: url("close.svg");
+	background-size: 20px;
+}
+
+
 #global-control .control-group {
-	margin-bottom: 20px;
+	background-color: white;
+	color: black;
+	border: 2px solid black;
+	border-radius: 10px;
+	padding: 15px;
+	margin-bottom: 5px;
+	transition: all .3s;
+}
+
+#global-control .control-group__hide {
+	transform: translateX(350px);
+	opacity: 0;
+}
+
+#global-control .control-group__display {
+	transform: translateX(0px);
+	opacity: 1;
 }
 
 #global-control label {
-	display: block;
-	margin-bottom: 10px;
+	display: inline-block;
+	margin-right: 5px;
 }
 
 #global-control label::first-letter {
@@ -47,14 +88,41 @@
 
 #global-control input {
 	display: block;
-	width: 200px;
+	width: 160px;
+	margin: 0;
+	float: right;
 }
+
+
 
 #global-control input[type="text"] {
 	width: 30px;
 	display: inline-block;
-	margin-right: 20px;
+	margin-left: 10px;
 	border: 0;
 	padding: 5px;
 	border-radius: 5px;
+	background-color: #222; 
+	color: white;
+	text-align: center;
 }
+
+.button-fullscreen {
+	z-index: 1001;
+	cursor: pointer;
+	position: fixed;
+	top: 21px;
+	right: 80px;
+	height: 45px;
+	width: 45px;
+	color: white;
+	background-image: url('expand.svg');
+	background-repeat: no-repeat;
+	background-size: 20px;
+	background-position: center;
+	background-color: black;
+	border: 0;
+	border-radius: 10px;
+	box-sizing: border-box; 	
+}
+

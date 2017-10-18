@@ -2,7 +2,7 @@
 function Polygon(args) {
   this.nbPoints = args.nbPoints;
   this.size = args.size;
-  this.scale = args.scale ? args.scale : [1, 1];
+  this.scale = args.scale ? args.scale : 1;
   this.rotate = args.rotate ? args.rotate : 0;
   this.x = args.x;
   this.y = args.y;
@@ -25,7 +25,7 @@ Polygon.prototype = {
     ctx.beginPath();
     ctx.translate(this.x, this.y);
     ctx.rotate(this.rotate*Math.PI/180)
-    ctx.scale(this.scale[0], this.scale[1]);
+    ctx.scale(this.scale, this.scale);
 
     var coords = this.getCoords();
     ctx.moveTo(coords[0][0], coords[0][1]);
