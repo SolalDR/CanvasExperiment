@@ -1,8 +1,10 @@
-function SoundAnalyser(url, args){
+function SoundAnalyser(sources, args){
 	window.AudioContext=window.AudioContext||window.webkitAudioContext||window.mozAudioContext;
 	this.ctx = new AudioContext();
 	this.analyser = this.ctx.createAnalyser();
-	this.buffer = null;
+    this.sources = sources; 
+	this.buffers = [];
+    this.currentBuffer = null;
 	this.gain = this.ctx.createGain();
 	this.echantillon = 50;
 	this.frequencyData = new Uint8Array(this.analyser.frequencyBinCount);
@@ -10,34 +12,52 @@ function SoundAnalyser(url, args){
 	this.average = 0
 	this.kicks = [];
 
-	if(args.active !== false) this.load(url);
+	if(args.active !== false) this.load(this.sources[0]);
 }
 
 SoundAnalyser.prototype =  {
-	load: function(url){
+
+    playCurrent: function(){
+        this.audio.connect( this.analyser )
+        this.analyser.connect( this.ctx.destination )
+        this.audio.start();
+    },
+
+    select: function(rank){
+        this.currentBuffer = this.buffers[rank]; 
+        this.audio.stop();
+        this.audio = this.ctx.createBufferSource();
+        this.audio.buffer = this.currentBuffer;
+        this.playCurrent();
+    },
+
+    loadBuffers: function(){
+        for(i=1; i<this.sources.length; i++) {
+            this.load(this.sources[i]);
+        }
+    },
+
+	load: function(source){
 		var self = this;
 		var request = new XMLHttpRequest();
-		request.open('GET', url, true);
+		request.open('GET', source.path, true);
 		request.responseType = 'arraybuffer';
 
 		// Decode asynchronously
 		request.onload = function() {
 			self.ctx.decodeAudioData(request.response, function(buffer) {
 			// success callback
-			self.buffer = buffer;
+			self.buffers.push(buffer);
 
 			// Create sound from buffer
-			self.audio = self.ctx.createBufferSource();
-			self.audio.buffer = self.buffer;
+            if( self.currentBuffer === null ) {
+                self.currentBuffer = buffer;
+                self.audio = self.ctx.createBufferSource();
+                self.audio.buffer = self.currentBuffer;
+                self.playCurrent();
+                self.loadBuffers();
+            }
 
-			// connect the audio source to context's output
-			self.audio.connect( self.analyser )
-			self.analyser.connect( self.ctx.destination )
-
-			// play sound
-			self.audio.start();
-
-			// self.callback();
 		}, function(e){
 			console.log(e)
         });

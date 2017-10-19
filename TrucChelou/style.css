@@ -8,6 +8,33 @@
 	animation-iteration-count: infinite;
 }
 
+#change-music {
+	position: fixed;
+	top: 20px;
+	left: 20px;
+	height: 45px;
+	width: 200px;
+	z-index: 2;
+	overflow: hidden;
+	border-radius: 10px;
+}
+
+#change-music-select {
+	background-color: black;
+	color: white;
+	border: 0;
+	border-radius: 10px;
+	padding-left: 10px;
+	letter-spacing: 1px;
+	height: 45px;
+	width: 250px;
+}
+
+#change-music::after {
+	content: '';
+	display: block; 
+}
+
 #menu {
 	position: fixed;
 	right: 50px;

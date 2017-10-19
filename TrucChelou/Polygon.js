@@ -20,24 +20,69 @@ Polygon.prototype = {
     }
     return coords; 
   },
-  render: function(ctx){
-    ctx.save();
-    ctx.beginPath();
-    ctx.translate(this.x, this.y);
-    ctx.rotate(this.rotate*Math.PI/180)
-    ctx.scale(this.scale, this.scale);
 
+  renderLine: function(ctx, coords){
     var coords = this.getCoords();
     ctx.moveTo(coords[0][0], coords[0][1]);
     for(i=0; i< coords.length; i++){
       ctx.lineTo(coords[i][0], coords[i][1]);
     }
-    
     ctx.closePath();
     ctx.fillStyle = this.fill ? this.fill : "#000";
     ctx.strokeStyle = this.stroke ? this.stroke : "#000";
     ctx.globalAlpha=this.alpha;
     ctx.stroke();
     ctx.restore()
+  },
+
+  renderPoint: function(ctx, coords) {
+    var coords = this.getCoords();
+    for(i=0; i< coords.length; i++){
+        ctx.moveTo(coords[i][0], coords[i][1]);
+        ctx.arc(coords[i][0], coords[i][1], 2,0,2*Math.PI);
+      }
+    ctx.closePath();
+    ctx.fillStyle = this.fill ? this.fill : "#000";
+    ctx.strokeStyle = this.stroke ? this.stroke : "#000";
+    ctx.globalAlpha=this.alpha;
+    ctx.stroke();
+    ctx.restore()
+  },
+
+  renderPointLine: function(ctx, coords){
+    var coords = this.getCoords();
+    
+    ctx.moveTo(coords[0][0], coords[0][1]);
+    for(i=0; i< coords.length; i++){
+      ctx.lineTo(coords[i][0], coords[i][1]);
+    }
+    ctx.closePath();
+    ctx.globalAlpha = 0;
+    ctx.strokeStyle = this.stroke ? this.stroke : "#000";
+    ctx.stroke();
+
+    for(i=0; i< coords.length; i++){
+      ctx.moveTo(coords[i][0], coords[i][1]);
+      ctx.arc(coords[i][0], coords[i][1], 2,0,2*Math.PI);
+    }
+    ctx.globalAlpha= .5 ;
+    ctx.strokeStyle = this.stroke ? this.stroke : "#000";
+    ctx.stroke();
+    ctx.restore()
+  },
+
+  render: function(ctx){
+    ctx.save();
+    ctx.beginPath();
+    ctx.translate(this.x, this.y);
+    ctx.rotate(this.rotate*Math.PI/180)
+    ctx.scale(this.scale, this.scale);
+    var coords = this.getCoords();
+    switch (drawType) {
+      case LINE_DRAW: this.renderLine(ctx, coords); break;
+      case POINT_DRAW: this.renderPoint(ctx, coords); break;
+      case LINE_POINT_DRAW: this.renderPointLine(ctx, coords); break;
+      case POINT_LINE_DRAW: this.renderPointLine(ctx, coords); break;
+    }
   }
 }

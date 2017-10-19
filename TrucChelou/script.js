@@ -22,6 +22,20 @@ window.onresize = function() {
 //
 /////////////////////////////////////////
 
+function manageBuffers(){
+	var select = document.querySelector("#change-music-select");
+	var options = []; 
+	for(i=0; i < buffers.length; i++) {
+		options.push(document.createElement('option'));
+		options[i].value = i;
+		options[i].innerHTML = buffers[i].name;
+		select.appendChild(options[i])
+	}
+	select.addEventListener("change", function(){
+		analyser.select(parseInt(this.value));
+	}, false)
+
+}
 
 function toggleFullScreen() {
   if ((document.fullScreenElement && document.fullScreenElement !== null) ||    
@@ -50,7 +64,7 @@ function draw(nbTriangles){
 	for(var i = 0; i< nbTriangles; i++ ) {
 		triangles.push(new Polygon({
 			// Number of points per polygon
-			nbPoints: store.side.val, 									
+			nbPoints: store.side.val,
 
 			// Each coord are shift more and more of the center thanks to spread
 			x: canvas.width/2 + growthAnimX(stepAngle, i, spreadAnim.x),	 
@@ -101,7 +115,7 @@ function approachSpreadCoord(){
 //				Audio	
 /////////////////////////////////////////
 
-var analyser = new SoundAnalyser('./Pont_des_arts.mp3', {})
+var analyser = new SoundAnalyser(buffers, {})
 analyser.addKick(70, 'basse');
 
 /////////////////////////////////////////
@@ -122,6 +136,8 @@ var hasKicked = false, kickTime = 0;
 var spreadTarget;
 var eases = [0.1, 0.05] // Ease
 
+var drawType = LINE_DRAW; 
+
 var render = function() {
 	// Time manage
 	now = Date.now();
@@ -132,6 +148,9 @@ var render = function() {
 	// Animation
 	opacityAnim = (Math.cos(anim/10) + 1)/4 + 0.5
 	rotateAnim = Math.cos(anim/20)*store.rotate.val;
+	if(drawType == LINE_POINT_DRAW) {
+		
+	}
 	
 	// ease approach of spreadTarget 
 	if(spreadTarget) approachSpreadCoord();
@@ -152,7 +171,6 @@ var render = function() {
 	average = analyser.getEaseFrequency(ease );
 
 	if(hasKicked) {
-		// genRandomSide();
 		genSpreadTarget();
 	}
 
@@ -161,7 +179,11 @@ var render = function() {
 	requestAnimationFrame(render);
 }
 
-requestAnimationFrame(render);
-var control = new GlobalControl("#global-control", store);
-manageFullScreen();
+window.addEventListener("load", function(){
+	requestAnimationFrame(render);
+	manageFullScreen();
+	manageBuffers();
+	var control = new GlobalControl("#global-control", store);
+}, false)
+
 
