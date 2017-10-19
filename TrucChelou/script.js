@@ -4,17 +4,62 @@
 //
 /////////////////////////////////////////
 
+// Canvas
 var canvas = document.querySelector("#canvas");
 var context = canvas.getContext("2d");
 canvas.width = window.innerWidth
 canvas.height = window.innerHeight
-window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
 window.onresize = function() {
 	canvas.width = this.innerWidth
 	canvas.height = this.innerHeight
 	draw();
 }
 
+// Raf polyfill
+window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+
+// Initialisation
+var anim1 = {
+	global: {
+		counter: 0,
+		lastTime: Date.now(),
+		delta: 0,
+		now: null
+	},
+	rotate: 0,
+	opacity: 0,
+	spread: {
+		target: null, 
+		position: {},
+	},
+	draw: {
+		counter: 0,
+		duration: DRAW_ANIM_DURATIONS[store.drawType.val]
+	}
+}
+
+
+var anim = 0; // Global count
+var lastTime = Date.now(), timeleft = 0, now;
+
+var spreadTarget, spreadAnim = {x: 0, y: 0};
+var rotateAnim = 0;
+var opacityAnim = 0;
+var triangles = [], stepScaleFactor, stepAngle;
+
+var control;
+var analyser;
+var average;
+
+var hasKicked = false, kickTime = 0;
+
+var spreadTarget;
+
+var eases = [0.1, 0.05];
+
+var drawCountTime = 0;  
+var drawTypeDuration = DRAW_ANIM_DURATIONS[store.drawType.val];  
+var drawAnim = 0; 
 
 /////////////////////////////////////////
 //
@@ -22,6 +67,7 @@ window.onresize = function() {
 //
 /////////////////////////////////////////
 
+// Multiple sound interface
 function manageBuffers(){
 	var select = document.querySelector("#change-music-select");
 	var options = []; 
@@ -37,6 +83,7 @@ function manageBuffers(){
 
 }
 
+// Manage fullScreen toggle
 function toggleFullScreen() {
   if ((document.fullScreenElement && document.fullScreenElement !== null) ||    
    (!document.mozFullScreen && !document.webkitIsFullScreen)) {
@@ -58,17 +105,18 @@ function toggleFullScreen() {
   }  
 }
 
-// Create ann triangles
+// Draw triangles
 function draw(nbTriangles){
 	context.clearRect(0,0,canvas.width, canvas.height);
-	for(var i = 0; i< nbTriangles; i++ ) {
+
+	for (var i = 0; i < nbTriangles; i++){
 		triangles.push(new Polygon({
 			// Number of points per polygon
 			nbPoints: store.side.val,
 
 			// Each coord are shift more and more of the center thanks to spread
-			x: canvas.width/2 + growthAnimX(stepAngle, i, spreadAnim.x),	 
-			y: canvas.height/2 + growthAnimX(stepAngle, i, spreadAnim.y), 
+			x: canvas.width/2 + Math.cos(stepAngle*i)*spreadAnim.x, 
+			y: canvas.height/2 + Math.cos(stepAngle*i)*spreadAnim.y, 
 
 			// Each polygon is rotate & scale more and more in function of his rank.   
 			rotate: rotateAnim/store.polygons.val*i + anim*3, // anim*3 create a global rotation of the scene
@@ -82,6 +130,30 @@ function draw(nbTriangles){
 	}
 } 
 
+// Manage drawType switch (Point or Triangles)
+function drawTypeUpdate(delta){
+	drawCountTime += delta; 
+
+	if( drawCountTime > drawTypeDuration ) {
+		drawCountTime = 0; 
+
+		// Toggle the drawing type with transitions
+		switch ( store.drawType.val ) {
+			case LINE_DRAW : 
+			store.drawType.val = LINE_POINT_DRAW; break;
+			case LINE_POINT_DRAW : 
+			store.drawType.val = POINT_DRAW; break;
+			case POINT_DRAW : 
+			store.drawType.val = POINT_LINE_DRAW; break;
+			case POINT_LINE_DRAW : 
+			store.drawType.val = LINE_DRAW; break;
+		}
+
+		drawTypeDuration = DRAW_ANIM_DURATIONS[store.drawType.val] 
+	}
+}
+
+// Manage button fullscreen
 function manageFullScreen() {
 	var btn = document.querySelector("#button-fullscreen");
 	btn.addEventListener("click", function(){
@@ -97,6 +169,7 @@ function genRandomSide(){
 	return store.side.val
 }
 
+// Generate random position of spread target origin
 function genSpreadTarget(){
 	spreadTarget = {
 		x: Math.random()*400 - 200,
@@ -104,6 +177,7 @@ function genSpreadTarget(){
 	}
 }
 
+// each raf, approach the spread target with ease
 function approachSpreadCoord(){
 	spreadAnim = {
 		x: spreadAnim.x + (spreadTarget.x - spreadAnim.x) * 0.01,
@@ -111,52 +185,30 @@ function approachSpreadCoord(){
 	}
 }
 
-/////////////////////////////////////////
-//				Audio	
-/////////////////////////////////////////
 
-var analyser = new SoundAnalyser(buffers, {})
-analyser.addKick(70, 'basse');
 
 /////////////////////////////////////////
-//			FUNCTIONS
+//			RENDER
 /////////////////////////////////////////
-
-growthAnimX = function(stepAngle, i, spread) { return Math.cos(stepAngle*i)*spread }
-
-var lastTime = Date.now(), timeleft = 0;
-var now; 
-var spreadTarget, spreadAnim = {x: 0, y: 0};
-var anim = 0; // Rotation global, incrémenter avec le temps
-var rotateAnim = 0;
-var opacityAnim = 0;
-var max = 100;	// Limit of average
-var triangles = [], stepScaleFactor, stepAngle, average;
-var hasKicked = false, kickTime = 0;
-var spreadTarget;
-var eases = [0.1, 0.05] // Ease
-
-var drawType = LINE_DRAW; 
 
 var render = function() {
+
 	// Time manage
 	now = Date.now();
 	timeleft = now - lastTime
 	lastTime = now
 	anim += 0.1
 
+
 	// Animation
+	drawTypeUpdate(timeleft);
+	drawAnim = drawCountTime/drawTypeDuration
 	opacityAnim = (Math.cos(anim/10) + 1)/4 + 0.5
 	rotateAnim = Math.cos(anim/20)*store.rotate.val;
-	if(drawType == LINE_POINT_DRAW) {
-		
-	}
-	
-	// ease approach of spreadTarget 
-	if(spreadTarget) approachSpreadCoord();
 
-	stepScaleFactor = (store.scale.max-store.scale.min)/store.polygons.val; 
-	stepAngle = Math.PI*2/store.polygons.val;
+
+	// ease approach of spread target 
+	if(spreadTarget) approachSpreadCoord();
 
 	// Kick match
 	kickTime += timeleft
@@ -170,20 +222,26 @@ var render = function() {
 	ease = analyser.average > 50 ? eases[1] : eases[0]
 	average = analyser.getEaseFrequency(ease );
 
+	// 
+	stepScaleFactor = (store.scale.max-store.scale.min)/store.polygons.val; 
+	stepAngle = Math.PI*2/store.polygons.val;
+
 	if(hasKicked) {
 		genSpreadTarget();
 	}
 
 	triangles = [];
 	draw(Math.min(200, average * 2));
+
 	requestAnimationFrame(render);
 }
 
 window.addEventListener("load", function(){
+	analyser = new SoundAnalyser(buffers, {})
 	requestAnimationFrame(render);
 	manageFullScreen();
 	manageBuffers();
-	var control = new GlobalControl("#global-control", store);
+	control = new GlobalControl("#global-control", store);
 }, false)
 
 

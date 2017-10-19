@@ -1,4 +1,4 @@
-function SoundAnalyser(sources, args){
+function SoundAnalyser(sources){
 	window.AudioContext=window.AudioContext||window.webkitAudioContext||window.mozAudioContext;
 	this.ctx = new AudioContext();
 	this.analyser = this.ctx.createAnalyser();
@@ -12,7 +12,7 @@ function SoundAnalyser(sources, args){
 	this.average = 0
 	this.kicks = [];
 
-	if(args.active !== false) this.load(this.sources[0]);
+	this.load(this.sources[0]);
 }
 
 SoundAnalyser.prototype =  {

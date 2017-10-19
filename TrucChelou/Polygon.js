@@ -1,3 +1,4 @@
+var circleImage = document.getElementById("sourceCircle");
 
 function Polygon(args) {
   this.nbPoints = args.nbPoints;
@@ -38,9 +39,9 @@ Polygon.prototype = {
   renderPoint: function(ctx, coords) {
     var coords = this.getCoords();
     for(i=0; i< coords.length; i++){
-        ctx.moveTo(coords[i][0], coords[i][1]);
-        ctx.arc(coords[i][0], coords[i][1], 2,0,2*Math.PI);
-      }
+      ctx.moveTo(coords[i][0], coords[i][1]);
+      ctx.arc(coords[i][0], coords[i][1], 2,0,2*Math.PI);
+    }
     ctx.closePath();
     ctx.fillStyle = this.fill ? this.fill : "#000";
     ctx.strokeStyle = this.stroke ? this.stroke : "#000";
@@ -57,18 +58,18 @@ Polygon.prototype = {
       ctx.lineTo(coords[i][0], coords[i][1]);
     }
     ctx.closePath();
-    ctx.globalAlpha = 0;
-    ctx.strokeStyle = this.stroke ? this.stroke : "#000";
-    ctx.stroke();
+    if(store.drawType.val === POINT_LINE_DRAW) ctx.globalAlpha = drawAnim * this.alpha;
+    if(store.drawType.val === LINE_POINT_DRAW) ctx.globalAlpha = (1 - drawAnim) * this.alpha;
 
-    for(i=0; i< coords.length; i++){
-      ctx.moveTo(coords[i][0], coords[i][1]);
-      ctx.arc(coords[i][0], coords[i][1], 2,0,2*Math.PI);
-    }
-    ctx.globalAlpha= .5 ;
-    ctx.strokeStyle = this.stroke ? this.stroke : "#000";
     ctx.stroke();
-    ctx.restore()
+    
+    if(store.drawType.val === POINT_LINE_DRAW) ctx.globalAlpha= (1 - drawAnim) * this.alpha;
+    if(store.drawType.val === LINE_POINT_DRAW) ctx.globalAlpha= drawAnim * this.alpha;
+    
+    for(i=0; i< coords.length; i++){
+      ctx.drawImage(circleImage, coords[i][0] - 2, coords[i][1] - 2, 4, 4)
+    }
+    ctx.restore();
   },
 
   render: function(ctx){
@@ -78,7 +79,7 @@ Polygon.prototype = {
     ctx.rotate(this.rotate*Math.PI/180)
     ctx.scale(this.scale, this.scale);
     var coords = this.getCoords();
-    switch (drawType) {
+    switch (store.drawType.val) {
       case LINE_DRAW: this.renderLine(ctx, coords); break;
       case POINT_DRAW: this.renderPoint(ctx, coords); break;
       case LINE_POINT_DRAW: this.renderPointLine(ctx, coords); break;
