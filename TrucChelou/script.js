@@ -17,7 +17,7 @@ window.onresize = function() {
 
 // Raf polyfill
 window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
-
+var cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame;
 // Initialisation
 var anim1 = {
 	global: {
@@ -236,8 +236,60 @@ var render = function() {
 	requestAnimationFrame(render);
 }
 
+
+/////////////////////////////////////////
+//	
+//			LOADER 
+//
+/////////////////////////////////////////
+
+var LoaderManage = {
+	anim: 1000,
+	set canStart(value) {
+		if(value == true) this.button.className = this.button.className.replace("loader__button--hidden", "loader__button--visible");
+	},
+	hideLoader: function(){
+		var self = this;
+		this.loader.className = this.loader.className.replace("loader--visible", "loader--hidding");
+		setTimeout(function(){
+			self.loader.className = self.loader.className.replace("loader--hidding", "loader--hidden");
+		}, this.anim)
+		this.raf
+	},
+
+	displayLoader: function(){
+		var self = this;
+		this.loader.className = this.loader.className.replace("loader--hidden", "loader--hidding");
+		setTimeout(function(){
+			self.loader.className = self.loader.className.replace("loader--hidding", "loader--visible");
+		}, this.anim)
+	},
+
+	initEvents: function(){
+		var self = this;
+		this.button.addEventListener("click", function() {
+			setTimeout(function(){
+				analyser.playCurrent();
+			}, 500);
+			self.hideLoader();
+		})
+	},
+
+	init: function(){
+		this.loader = document.getElementById('loader'); 
+		this.button = document.getElementById("loader__button");
+		this.stopBtn = document.getElementById("stop__button");
+		this.initEvents();
+	}
+}
+
 window.addEventListener("load", function(){
-	analyser = new SoundAnalyser(buffers, {})
+	LoaderManage.init();
+	analyser = new SoundAnalyser(buffers, {
+		onload: function(){
+			LoaderManage.canStart = true;
+		}
+	})
 	requestAnimationFrame(render);
 	manageFullScreen();
 	manageBuffers();

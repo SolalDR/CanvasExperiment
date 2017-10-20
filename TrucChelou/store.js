@@ -2,7 +2,7 @@ const LINE_DRAW = 0;
 const LINE_POINT_DRAW = 1;
 const POINT_DRAW = 2;
 const POINT_LINE_DRAW = 3
-const DRAW_ANIM_DURATIONS = [15000, 5000, 1000, 5000]; 
+const DRAW_ANIM_DURATIONS = [15000, 5000, 5000, 5000]; 
 
 store = {
   side: {

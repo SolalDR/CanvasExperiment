@@ -2,10 +2,30 @@
 <html>
 	<head>
 		<title>Canvas experiment</title>
-		<link rel="stylesheet" href="style.css">
+		<link rel="stylesheet" href="app.css">
+		<link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
 		<meta charset="UTF-8">
 	</head>
-	<body>	
+	<body>
+		<div id="loader" class="loader loader--visible">
+			<div class="loader__container">
+				<h1>Audio Exp</h1>
+				<svg id="loadersvg" width="300" height="200">
+					<path d="M-25, 25, 25, 25, 0, -25z'"  stroke-width="1"/>
+					<path d="M-25, 25, 25, 25, 0, -25z'"  stroke-width="1"/>
+					<path d="M-25, 25, 25, 25, 0, -25z'"  stroke-width="1"/>
+					<path d="M-25, 25, 25, 25, 0, -25z'"  stroke-width="1"/>
+					<path d="M-25, 25, 25, 25, 0, -25z'"  stroke-width="1"/>
+					<path d="M-25, 25, 25, 25, 0, -25z'"  stroke-width="1"/>
+				</svg>
+				<button id="loader__button" class="loader__button loader__button--hidden">
+					  <svg viewBox='0 0 250 60'>
+					  	<path d='M250,60 0,60 0,0 250,0z'></path>
+					  </svg>
+					  <span>Commencer l'expérience</span>
+				</button>
+			</div>
+		</div>
 		<button id="button-fullscreen" class="button-fullscreen"></button>
 		<div id="change-music">
 			<label for="change-music-select"></label>

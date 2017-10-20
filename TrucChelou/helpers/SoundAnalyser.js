@@ -1,4 +1,4 @@
-function SoundAnalyser(sources){
+function SoundAnalyser(sources, args){
 	window.AudioContext=window.AudioContext||window.webkitAudioContext||window.mozAudioContext;
 	this.ctx = new AudioContext();
 	this.analyser = this.ctx.createAnalyser();
@@ -11,7 +11,7 @@ function SoundAnalyser(sources){
 	this.easeAverage = 0;
 	this.average = 0
 	this.kicks = [];
-
+    this.onload = args.onload;
 	this.load(this.sources[0]);
 }
 
@@ -54,8 +54,9 @@ SoundAnalyser.prototype =  {
                 self.currentBuffer = buffer;
                 self.audio = self.ctx.createBufferSource();
                 self.audio.buffer = self.currentBuffer;
-                self.playCurrent();
+                // self.playCurrent();
                 self.loadBuffers();
+                self.onload();
             }
 
 		}, function(e){

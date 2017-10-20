@@ -29,7 +29,6 @@ Polygon.prototype = {
       ctx.lineTo(coords[i][0], coords[i][1]);
     }
     ctx.closePath();
-    ctx.fillStyle = this.fill ? this.fill : "#000";
     ctx.strokeStyle = this.stroke ? this.stroke : "#000";
     ctx.globalAlpha=this.alpha;
     ctx.stroke();
@@ -38,14 +37,11 @@ Polygon.prototype = {
 
   renderPoint: function(ctx, coords) {
     var coords = this.getCoords();
+    ctx.globalAlpha=this.alpha;
     for(i=0; i< coords.length; i++){
-      ctx.moveTo(coords[i][0], coords[i][1]);
-      ctx.arc(coords[i][0], coords[i][1], 2,0,2*Math.PI);
+      ctx.drawImage(circleImage, coords[i][0] - 2, coords[i][1] - 2, 4, 4)
     }
     ctx.closePath();
-    ctx.fillStyle = this.fill ? this.fill : "#000";
-    ctx.strokeStyle = this.stroke ? this.stroke : "#000";
-    ctx.globalAlpha=this.alpha;
     ctx.stroke();
     ctx.restore()
   },

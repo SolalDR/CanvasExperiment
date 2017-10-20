@@ -1,8 +1,213 @@
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+body {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  height: 100vh;
+  overflow: hidden;
+  font-family: "Raleway";
+}
+
+button {
+	display: block;
+	margin: auto;
+  position: relative;
+  background: none;
+  text-transform: uppercase;
+  border: none;
+  padding: 0;
+  color: rgba(0, 0, 0, 0.7);
+  outline: none;
+  -webkit-transition: color 0.3s;
+  transition: color 0.3s;
+  cursor: pointer;
+}
+button svg {
+  width: 250px;
+  height: 60px;
+  fill: none;
+  stroke: currentColor;
+  stroke-dasharray: 0, 0, 620px, 620px;
+  -webkit-transition: stroke-dasharray 0.3s;
+  transition: stroke-dasharray 0.6s;
+}
+button path {
+	stroke-width: 5;
+}
+button span {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  line-height: 60px;
+  font-size: 13px;
+	letter-spacing: 1px;
+}
+button:hover, button:focus {
+  color: #000;
+}
+button:hover svg, button:focus svg {
+  stroke-dasharray: 250px, 620px;
+}
+
+#loadersvg path {
+	transform: translateX(50%) translateY(50%);
+	fill: none;
+	stroke: black;
+}
+
+#loadersvg path:nth-child(1) {
+	transform: translateX(50%) translateY(50%) scale(1);
+	stroke: rgba(0, 0, 0, 1);
+}
+
+#loadersvg path:nth-child(2) {
+	transform: translateX(50%) translateY(50%) scale(0.9);
+	stroke: rgba(0, 0, 0, 0.9);
+}
+
+#loadersvg path:nth-child(3) {
+	transform: translateX(50%) translateY(50%) scale(0.8);
+	stroke: rgba(0, 0, 0, 0.9);
+}
+
+#loadersvg path:nth-child(4) {
+	transform: translateX(50%) translateY(50%) scale(0.7);
+	stroke: rgba(0, 0, 0, 0.8);
+}
+
+#loadersvg path:nth-child(5) {
+	transform: translateX(50%) translateY(50%) scale(0.6);
+	stroke: rgba(0, 0, 0, 0.7);
+}
+
+#loadersvg path:nth-child(6) {
+	transform: translateX(50%) translateY(50%) scale(0.5);
+	stroke: rgba(0, 0, 0, 0.6);
+}
+
+
+
+
+/* / Buttons */
+
+#loader {
+	height: 100vh;
+	width: 100vw;
+	background-color: white;
+	z-index: 1002;
+	position: fixed;
+	top: 0;
+	left: 0;
+	flex-direction: column;
+	justify-content: center;
+	transition: all .4s;
+}
+.loader--visible { opacity: 1; display: flex;  }
+.loader--hidding { opacity: 0; display: flex;  }
+.loader--hidden { display: none; }
+.loader__container {
+	text-align: center;
+}
+
+.loader__container h1 {
+	text-align: center;
+	font-size: 70px;
+	font-weight: 100;
+	letter-spacing: 5px;
+}
+
+.loader__button {
+	transition: all .4s ease;
+}
+.loader__button--hidden { 
+	opacity: 0; 
+	pointer-events: none;
+	user-select: none;
+}
+.loader__button--visible { 
+	opacity: 1; 
+}
+
+
+/*
+.loader__container button {
+	text-align: center;
+	display: block;
+	margin: auto;
+	border: 0;
+	padding: 20px 30px;
+	background-color: black;
+	color: white;
+	font-size: 10px;
+	font-weight: 100;
+	text-transform: uppercase;
+	letter-spacing: 5px;
+	transition: all .4s ease;
+}
+*/
+
+
+
 #canvas {
 	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translateY(-50%) translateX(-50%);
+	top: 0%;
+	left: 0%;
 	animation-name: rotate;
 	animation-duration: 3000;
 	animation-iteration-count: infinite;
@@ -16,14 +221,14 @@
 	width: 200px;
 	z-index: 2;
 	overflow: hidden;
-	border-radius: 10px;
+	border-radius: 5px;
 }
 
 #change-music-select {
 	background-color: black;
 	color: white;
 	border: 0;
-	border-radius: 10px;
+	border-radius: 5px;
 	padding-left: 10px;
 	letter-spacing: 1px;
 	height: 45px;
@@ -34,6 +239,9 @@
 	content: '';
 	display: block; 
 }
+
+
+/* MENU */
 
 #menu {
 	position: fixed;
@@ -51,8 +259,8 @@
 	right: 20px;
 	z-index: 999;
 	color: white; 
+	padding-top: 60px;
 	border-radius: 5px;
-	font-family: sans-serif;
 	font-weight: 200;
 	letter-spacing: 1px;
 	padding-top: 70px;
@@ -63,7 +271,7 @@
 	height: 45px;
 	background-color: black;
 	float: right;
-	border-radius: 10px;
+	border-radius: 5px;
 	border: 0;
 	background-position: center;
 	background-repeat: no-repeat;
@@ -88,7 +296,7 @@
 	background-color: white;
 	color: black;
 	border: 2px solid black;
-	border-radius: 10px;
+	border-radius: 5px;
 	padding: 15px;
 	margin-bottom: 5px;
 	transition: all .3s;
@@ -149,7 +357,7 @@
 	background-position: center;
 	background-color: black;
 	border: 0;
-	border-radius: 10px;
+	border-radius: 5px;
 	box-sizing: border-box; 	
 }
 

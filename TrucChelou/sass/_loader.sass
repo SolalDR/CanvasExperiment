@@ -1,0 +1,64 @@
+#loadersvg path
+  transform: translateX(50%) translateY(50%)
+  fill: none
+  stroke: black
+  &:nth-child(1)
+    transform: translateX(50%) translateY(50%) scale(1)
+    stroke: rgba(0, 0, 0, 1)
+  &:nth-child(2)
+    transform: translateX(50%) translateY(50%) scale(0.9)
+    stroke: rgba(0, 0, 0, 0.9)
+  &:nth-child(3)
+    transform: translateX(50%) translateY(50%) scale(0.8)
+    stroke: rgba(0, 0, 0, 0.9)
+  &:nth-child(4)
+    transform: translateX(50%) translateY(50%) scale(0.7)
+    stroke: rgba(0, 0, 0, 0.8)
+  &:nth-child(5)
+    transform: translateX(50%) translateY(50%) scale(0.6)
+    stroke: rgba(0, 0, 0, 0.7)
+  &:nth-child(6)
+    transform: translateX(50%) translateY(50%) scale(0.5)
+    stroke: rgba(0, 0, 0, 0.6)
+
+#loader.loader
+  height: 100vh
+  width: 100vw
+  background-color: white
+  z-index: 1002
+  position: fixed
+  top: 0
+  left: 0
+  flex-direction: column
+  justify-content: center
+  transition: all .4s
+
+.loader--visible
+  opacity: 1
+  display: flex
+
+.loader--hidding
+  opacity: 0
+  display: flex
+
+.loader--hidden
+  display: none
+
+.loader__container
+  text-align: center
+  h1
+    text-align: center
+    font-size: 70px
+    font-weight: 100
+    letter-spacing: 5px
+
+.loader__button
+  transition: all .4s ease
+
+.loader__button--hidden
+  opacity: 0
+  pointer-events: none
+  user-select: none
+
+.loader__button--visible
+  opacity: 1
