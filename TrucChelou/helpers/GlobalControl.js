@@ -65,6 +65,7 @@ GlobalControl.prototype = {
   generateControl: function(paramS){
     var param = this.store[paramS];
     var els = [];
+    if( !param.type ) return;
     var container = document.createElement('div'); 
     container.className = "control-group control-group__hide"; 
     

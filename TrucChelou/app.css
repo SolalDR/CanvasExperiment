@@ -70,8 +70,7 @@ button {
   color: rgba(0, 0, 0, 0.7);
   outline: none;
   -webkit-transition: color 0.3s;
-  transition: color 0.3s;
-  cursor: pointer; }
+  transition: color 0.3s; }
 
 button svg {
   width: 250px;
@@ -101,23 +100,36 @@ button:hover, button:focus {
 button:hover svg, button:focus svg {
   stroke-dasharray: 250px, 620px; }
 
-.button-fullscreen {
+.btn-action {
   z-index: 1001;
   cursor: pointer;
   position: fixed;
   top: 21px;
-  right: 80px;
   height: 45px;
   width: 45px;
   color: white;
-  background-image: url("images/expand.svg");
   background-repeat: no-repeat;
   background-size: 20px;
   background-position: center;
-  background-color: black;
-  border: 0;
   border-radius: 5px;
+  border: 0;
   box-sizing: border-box; }
+
+.button-fullscreen {
+  right: 80px;
+  background-image: url("images/expand.svg");
+  background-color: black;
+  filter: invert(100%); }
+
+.button-sound-cut {
+  right: 145px;
+  background-image: url("images/expand.svg");
+  background-color: white;
+  background-size: 28px; }
+  .button-sound-cut--sound {
+    background-image: url("images/speaker-sound.png"); }
+  .button-sound-cut--mute {
+    background-image: url("images/speaker-mute.png"); }
 
 #change-music {
   position: fixed;
@@ -179,13 +191,15 @@ button:hover svg, button:focus svg {
     transition: all 0.4s; }
     #global-control .button-control__hide {
       background-image: url("images/menu.svg");
-      background-size: 20px; }
+      background-size: 20px;
+      filter: invert(100%); }
     #global-control .button-control__display {
       background-image: url("images/close.svg");
       background-size: 20px; }
   #global-control .control-group {
     background-color: white;
     color: black;
+    width: 260px;
     border: 2px solid black;
     border-radius: 5px;
     padding: 15px;
@@ -207,40 +221,107 @@ button:hover svg, button:focus svg {
       width: 160px;
       margin: 0;
       float: right; }
-    #global-control .control-group[type="text"] {
-      width: 30px;
-      display: inline-block;
-      margin-left: 10px;
-      border: 0;
-      padding: 5px;
-      border-radius: 5px;
-      background-color: #222;
-      color: white;
-      text-align: center; }
+      #global-control .control-group input[type="text"] {
+        width: 30px;
+        display: inline-block;
+        margin-left: 10px;
+        border: 0;
+        padding: 5px;
+        border-radius: 5px;
+        background-color: #222;
+        color: white;
+        text-align: center; }
+
+#loadersvg {
+  transform: rotate(180deg); }
 
 #loadersvg path {
-  transform: translateX(50%) translateY(50%);
   fill: none;
-  stroke: black; }
+  stroke: black;
+  transform-origin: 50%; }
   #loadersvg path:nth-child(1) {
-    transform: translateX(50%) translateY(50%) scale(1);
-    stroke: black; }
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+    animation-name: rotate-1;
+    animation-duration: 6s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out; }
   #loadersvg path:nth-child(2) {
-    transform: translateX(50%) translateY(50%) scale(0.9);
-    stroke: rgba(0, 0, 0, 0.9); }
+    transform: scale(0.9) rotate(0deg);
+    opacity: 0.85;
+    animation-name: rotate-2;
+    animation-duration: 6s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out; }
   #loadersvg path:nth-child(3) {
-    transform: translateX(50%) translateY(50%) scale(0.8);
-    stroke: rgba(0, 0, 0, 0.9); }
+    transform: scale(0.8) rotate(0deg);
+    opacity: 0.7;
+    animation-name: rotate-3;
+    animation-duration: 6s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out; }
   #loadersvg path:nth-child(4) {
-    transform: translateX(50%) translateY(50%) scale(0.7);
-    stroke: rgba(0, 0, 0, 0.8); }
+    transform: scale(0.7) rotate(0deg);
+    opacity: 0.55;
+    animation-name: rotate-4;
+    animation-duration: 6s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out; }
   #loadersvg path:nth-child(5) {
-    transform: translateX(50%) translateY(50%) scale(0.6);
-    stroke: rgba(0, 0, 0, 0.7); }
+    transform: scale(0.6) rotate(0deg);
+    opacity: 0.4;
+    animation-name: rotate-5;
+    animation-duration: 6s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out; }
   #loadersvg path:nth-child(6) {
-    transform: translateX(50%) translateY(50%) scale(0.5);
-    stroke: rgba(0, 0, 0, 0.6); }
+    transform: scale(0.5) rotate(0deg);
+    opacity: 0.25;
+    animation-name: rotate-6;
+    animation-duration: 6s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out; }
 
+@keyframes rotate-1 {
+  0% {
+    transform: scale(1); }
+  50% {
+    transform: scale(1.5); }
+  100% {
+    transform: scale(1); } }
+@keyframes rotate-2 {
+  0% {
+    transform: scale(0.9); }
+  50% {
+    transform: scale(1.2); }
+  100% {
+    transform: scale(0.9); } }
+@keyframes rotate-3 {
+  0% {
+    transform: scale(0.8); }
+  50% {
+    transform: scale(0.9); }
+  100% {
+    transform: scale(0.8); } }
+@keyframes rotate-4 {
+  0% {
+    transform: scale(0.7); }
+  50% {
+    transform: scale(0.6); }
+  100% {
+    transform: scale(0.7); } }
+@keyframes rotate-5 {
+  0% {
+    transform: scale(0.6); }
+  50% {
+    transform: scale(0.3); }
+  100% {
+    transform: scale(0.6); } }
+@keyframes loadersvg {
+  0% {
+    transform: rotate(0deg); }
+  100% {
+    transform: rotate(360deg); } }
 #loader.loader {
   height: 100vh;
   width: 100vw;
@@ -268,12 +349,16 @@ button:hover svg, button:focus svg {
   text-align: center; }
   .loader__container h1 {
     text-align: center;
-    font-size: 70px;
+    font-size: 35px;
     font-weight: 100;
-    letter-spacing: 5px; }
+    letter-spacing: 5px;
+    margin-bottom: 30px; }
 
 .loader__button {
-  transition: all 0.4s ease; }
+  transition: all 0.4s ease;
+  transform: scale(0.8);
+  color: black;
+  margin-top: 20px; }
 
 .loader__button--hidden {
   opacity: 0;
@@ -282,6 +367,13 @@ button:hover svg, button:focus svg {
 
 .loader__button--visible {
   opacity: 1; }
+
+.mode--active, .mode--lite {
+  transition: 0.3s; }
+.mode--active {
+  opacity: 1; }
+.mode--lite {
+  opacity: 0; }
 
 #canvas {
   position: absolute;

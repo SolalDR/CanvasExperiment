@@ -12,6 +12,7 @@ body {
   height: 100vh;
   overflow: hidden;
   font-family: "Raleway";
+  // cursor: url("./images/cursor.png") 2 2, pointer;
 }
 
 button {
@@ -26,7 +27,7 @@ button {
   outline: none;
   -webkit-transition: color 0.3s;
   transition: color 0.3s;
-  cursor: pointer;
+  // cursor: url("./images/cursor.png") 2 2, pointer;
 }
 button svg {
   width: 250px;
@@ -57,21 +58,37 @@ button:hover svg, button:focus svg {
   stroke-dasharray: 250px, 620px;
 }
 
-.button-fullscreen {
+.btn-action {
   z-index: 1001;
   cursor: pointer;
   position: fixed;
   top: 21px;
-  right: 80px;
   height: 45px;
   width: 45px;
   color: white;
-  background-image: url('images/expand.svg');
   background-repeat: no-repeat;
   background-size: 20px;
   background-position: center;
-  background-color: black;
-  border: 0;
   border-radius: 5px;
+  border: 0;
   box-sizing: border-box;   
+}
+.button-fullscreen {
+  right: 80px;
+  background-image: url('images/expand.svg');
+  background-color: black;
+  filter: invert(100%);
+}
+
+.button-sound-cut {
+  right: 145px;
+  background-image: url('images/expand.svg');
+  background-color: white;
+  background-size: 28px;
+  &--sound {
+    background-image: url('images/speaker-sound.png');
+  }
+  &--mute {
+    background-image: url('images/speaker-mute.png');
+  }
 }

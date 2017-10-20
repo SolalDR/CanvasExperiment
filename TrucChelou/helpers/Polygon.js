@@ -13,6 +13,8 @@ function Polygon(args) {
 }
 
 Polygon.prototype = {
+
+  // Return coords 
   getCoords: function(){
     angle = Math.PI*2/this.nbPoints; 
     var coords = [];
@@ -22,7 +24,23 @@ Polygon.prototype = {
     return coords; 
   },
 
-  renderLine: function(ctx, coords){
+  // Main render
+  render: function(ctx){
+    ctx.save();
+    ctx.beginPath();
+    ctx.translate(this.x, this.y);
+    ctx.rotate(this.rotate*Math.PI/180)
+    ctx.scale(this.scale, this.scale);
+    var coords = this.getCoords();
+    switch (store.drawType.val) {
+      case LINE_DRAW: this.drawLine(ctx, coords); break;
+      case POINT_DRAW: this.drawPoint(ctx, coords); break;
+      default: this.drawPointLine(ctx, coords);
+    }
+  },
+
+  // Draw a polygon with lines
+  drawLine: function(ctx, coords){
     var coords = this.getCoords();
     ctx.moveTo(coords[0][0], coords[0][1]);
     for(i=0; i< coords.length; i++){
@@ -35,7 +53,8 @@ Polygon.prototype = {
     ctx.restore()
   },
 
-  renderPoint: function(ctx, coords) {
+  // Draw a polygon with points
+  drawPoint: function(ctx, coords) {
     var coords = this.getCoords();
     ctx.globalAlpha=this.alpha;
     for(i=0; i< coords.length; i++){
@@ -46,40 +65,34 @@ Polygon.prototype = {
     ctx.restore()
   },
 
-  renderPointLine: function(ctx, coords){
+  // Draw polygon with lines and points
+  drawPointLine: function(ctx, coords){
     var coords = this.getCoords();
     
+    // Define alpha for point and lines
+    var alphaPoint, alphaLine;
+    switch (store.drawType.val) {
+      case POINT_LINE_DRAW:
+      alphaPoint = (1 - drawAnim) * this.alpha;
+      alphaLine = drawAnim * this.alpha;
+      break;
+      case LINE_POINT_DRAW:
+      alphaPoint = drawAnim * this.alpha;
+      alphaLine = (1 - drawAnim) * this.alpha;
+      break;
+    }
+
+    ctx.globalAlpha = alphaLine;
     ctx.moveTo(coords[0][0], coords[0][1]);
-    for(i=0; i< coords.length; i++){
+    for(i=1; i < coords.length; i++){
       ctx.lineTo(coords[i][0], coords[i][1]);
     }
     ctx.closePath();
-    if(store.drawType.val === POINT_LINE_DRAW) ctx.globalAlpha = drawAnim * this.alpha;
-    if(store.drawType.val === LINE_POINT_DRAW) ctx.globalAlpha = (1 - drawAnim) * this.alpha;
-
     ctx.stroke();
-    
-    if(store.drawType.val === POINT_LINE_DRAW) ctx.globalAlpha= (1 - drawAnim) * this.alpha;
-    if(store.drawType.val === LINE_POINT_DRAW) ctx.globalAlpha= drawAnim * this.alpha;
-    
+    ctx.globalAlpha = alphaPoint;
     for(i=0; i< coords.length; i++){
       ctx.drawImage(circleImage, coords[i][0] - 2, coords[i][1] - 2, 4, 4)
     }
     ctx.restore();
-  },
-
-  render: function(ctx){
-    ctx.save();
-    ctx.beginPath();
-    ctx.translate(this.x, this.y);
-    ctx.rotate(this.rotate*Math.PI/180)
-    ctx.scale(this.scale, this.scale);
-    var coords = this.getCoords();
-    switch (store.drawType.val) {
-      case LINE_DRAW: this.renderLine(ctx, coords); break;
-      case POINT_DRAW: this.renderPoint(ctx, coords); break;
-      case LINE_POINT_DRAW: this.renderPointLine(ctx, coords); break;
-      case POINT_LINE_DRAW: this.renderPointLine(ctx, coords); break;
-    }
   }
 }

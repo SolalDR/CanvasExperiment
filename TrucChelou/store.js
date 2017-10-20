@@ -1,3 +1,5 @@
+// This file store the config of all parameters
+
 const LINE_DRAW = 0; 
 const LINE_POINT_DRAW = 1;
 const POINT_DRAW = 2;
@@ -18,6 +20,7 @@ store = {
     val: 100
   },
   scale: {
+    type: 'text',
     min: 1,
     max: 2
   },
@@ -34,12 +37,8 @@ store = {
     val: 0
   },
   drawType: {
-    type: 'select',
-    vals: [
-      {name: "Line draw", value: LINE_DRAW},
-      {name: "Point draw", value: POINT_DRAW}
-    ],
-    val: LINE_DRAW
+    val: LINE_DRAW,
+    duration: DRAW_ANIM_DURATIONS[LINE_DRAW]
   }
   // opacity: {
   //   type: 'range',

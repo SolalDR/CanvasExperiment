@@ -18,26 +18,6 @@ window.onresize = function() {
 // Raf polyfill
 window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
 var cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame;
-// Initialisation
-var anim1 = {
-	global: {
-		counter: 0,
-		lastTime: Date.now(),
-		delta: 0,
-		now: null
-	},
-	rotate: 0,
-	opacity: 0,
-	spread: {
-		target: null, 
-		position: {},
-	},
-	draw: {
-		counter: 0,
-		duration: DRAW_ANIM_DURATIONS[store.drawType.val]
-	}
-}
-
 
 var anim = 0; // Global count
 var lastTime = Date.now(), timeleft = 0, now;
@@ -47,9 +27,7 @@ var rotateAnim = 0;
 var opacityAnim = 0;
 var triangles = [], stepScaleFactor, stepAngle;
 
-var control;
-var analyser;
-var average;
+var control, analyser, average;
 
 var hasKicked = false, kickTime = 0;
 
@@ -57,9 +35,7 @@ var spreadTarget;
 
 var eases = [0.1, 0.05];
 
-var drawCountTime = 0;  
-var drawTypeDuration = DRAW_ANIM_DURATIONS[store.drawType.val];  
-var drawAnim = 0; 
+var drawCountTime = 0, drawAnim = 0;  
 
 /////////////////////////////////////////
 //
@@ -134,7 +110,7 @@ function draw(nbTriangles){
 function drawTypeUpdate(delta){
 	drawCountTime += delta; 
 
-	if( drawCountTime > drawTypeDuration ) {
+	if( drawCountTime > store.drawType.duration ) {
 		drawCountTime = 0; 
 
 		// Toggle the drawing type with transitions
@@ -149,7 +125,7 @@ function drawTypeUpdate(delta){
 			store.drawType.val = LINE_DRAW; break;
 		}
 
-		drawTypeDuration = DRAW_ANIM_DURATIONS[store.drawType.val] 
+		store.drawType.duration = DRAW_ANIM_DURATIONS[store.drawType.val] 
 	}
 }
 
@@ -185,7 +161,46 @@ function approachSpreadCoord(){
 	}
 }
 
+// Manage sound cut button
+function soundMuteManage(){
+	var btn = document.getElementById('button-sound-mute');
+	btn.addEventListener('click', function(){
+		if(analyser.gain.gain.value === -1) {
+			btn.className = btn.className.replace("button-sound-cut--mute", "button-sound-cut--sound");
+			analyser.sound();
+		} else {
+			btn.className = btn.className.replace("button-sound-cut--sound", "button-sound-cut--mute");
+			analyser.mute();
+		}
+	})
+}
 
+
+// Manage user activity and hide control after a time
+function modeManage(){
+	var lastMove = Date.now();
+	var duration = 3000, timeout, active = true ;
+	var nodes = document.querySelectorAll('.mode--active')
+	timeout = setTimeout(function() {
+		active = toggleMode(nodes, false);
+	}, duration);
+	window.addEventListener("mousemove", function(){
+		lastMove = Date.now();
+		if( !active ) active = toggleMode(nodes, true);
+		clearTimeout(timeout);
+		timeout = setTimeout(function() {
+			active = toggleMode(nodes, false);
+		}, duration);
+	})
+}
+
+function toggleMode(nodes, mode) {
+	var toggles = mode === false ? ["mode--active", "mode--lite"] : ["mode--lite", "mode--active"];
+	for(i=0; i<nodes.length; i++) {
+		nodes[i].className = nodes[i].className.replace(toggles[0], toggles[1]);
+	}
+	return mode
+}
 
 /////////////////////////////////////////
 //			RENDER
@@ -202,7 +217,7 @@ var render = function() {
 
 	// Animation
 	drawTypeUpdate(timeleft);
-	drawAnim = drawCountTime/drawTypeDuration
+	drawAnim = drawCountTime/store.drawType.duration
 	opacityAnim = (Math.cos(anim/10) + 1)/4 + 0.5
 	rotateAnim = Math.cos(anim/20)*store.rotate.val;
 
@@ -237,6 +252,7 @@ var render = function() {
 }
 
 
+
 /////////////////////////////////////////
 //	
 //			LOADER 
@@ -245,9 +261,13 @@ var render = function() {
 
 var LoaderManage = {
 	anim: 1000,
+
+	// Display start btn
 	set canStart(value) {
 		if(value == true) this.button.className = this.button.className.replace("loader__button--hidden", "loader__button--visible");
 	},
+
+	// Display / Hide loader
 	hideLoader: function(){
 		var self = this;
 		this.loader.className = this.loader.className.replace("loader--visible", "loader--hidding");
@@ -256,7 +276,6 @@ var LoaderManage = {
 		}, this.anim)
 		this.raf
 	},
-
 	displayLoader: function(){
 		var self = this;
 		this.loader.className = this.loader.className.replace("loader--hidden", "loader--hidding");
@@ -265,9 +284,11 @@ var LoaderManage = {
 		}, this.anim)
 	},
 
+	// Init start click 
 	initEvents: function(){
 		var self = this;
 		this.button.addEventListener("click", function() {
+			// Start the sound
 			setTimeout(function(){
 				analyser.playCurrent();
 			}, 500);
@@ -283,17 +304,21 @@ var LoaderManage = {
 	}
 }
 
+
+
 window.addEventListener("load", function(){
-	LoaderManage.init();
+	LoaderManage.init();	
 	analyser = new SoundAnalyser(buffers, {
 		onload: function(){
 			LoaderManage.canStart = true;
 		}
 	})
+	control = new GlobalControl("#global-control", store);
 	requestAnimationFrame(render);
 	manageFullScreen();
 	manageBuffers();
-	control = new GlobalControl("#global-control", store);
+	soundMuteManage()	
+	modeManage();
 }, false)
 
 

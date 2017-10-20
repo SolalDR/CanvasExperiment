@@ -1,25 +1,45 @@
+$baseRotate: 3
+$targetRotate: 45
+
+#loadersvg
+  transform: rotate(180deg)
+  
 #loadersvg path
-  transform: translateX(50%) translateY(50%)
   fill: none
   stroke: black
-  &:nth-child(1)
-    transform: translateX(50%) translateY(50%) scale(1)
-    stroke: rgba(0, 0, 0, 1)
-  &:nth-child(2)
-    transform: translateX(50%) translateY(50%) scale(0.9)
-    stroke: rgba(0, 0, 0, 0.9)
-  &:nth-child(3)
-    transform: translateX(50%) translateY(50%) scale(0.8)
-    stroke: rgba(0, 0, 0, 0.9)
-  &:nth-child(4)
-    transform: translateX(50%) translateY(50%) scale(0.7)
-    stroke: rgba(0, 0, 0, 0.8)
-  &:nth-child(5)
-    transform: translateX(50%) translateY(50%) scale(0.6)
-    stroke: rgba(0, 0, 0, 0.7)
-  &:nth-child(6)
-    transform: translateX(50%) translateY(50%) scale(0.5)
-    stroke: rgba(0, 0, 0, 0.6)
+  // animation-name: loadersvg
+  // animation-iteration-count: infinite
+  transform-origin: 50%
+  
+  $nbTriangle: 6
+  @for $i from 1 to 7
+    &:nth-child(#{$i})
+      //transform: translateX(50%) translateY(50%) scale(#{1 - 0.1 * ($i - 1)}) rotate(#{$baseRotate*$i}deg)
+      transform: scale(#{1 - 0.1 * ($i - 1)}) rotate(0deg)
+      opacity: 1 - 0.15 * ($i - 1)
+      animation-name: rotate-#{$i}
+      animation-duration: 6s
+      animation-iteration-count: infinite
+      animation-timing-function: ease-in-out
+
+@for $i from 1 to 6 
+  @keyframes rotate-#{$i}
+    0%  
+      transform: scale(#{1 - 0.1 * ($i - 1)}) //rotate(0deg)  translateY(0px)
+      // transform: translateX(50%) translateY(50%) scale(#{1 - 0.1 * ($i - 1)}) rotate(#{$baseRotate*$i}deg)
+    50% 
+      transform: scale(#{1.5 - 0.3 * ($i - 1)}) //rotate(#{$targetRotate*$i}deg) translateY(#{5*$i}px)
+    //66%
+      //transform: scale(#{1.5 - 0.3 * ($i - 1)}) //rotate(#{-1*$targetRotate*$i}deg) translateY(#{5*$i}px)
+    100% 
+      transform: scale(#{1 - 0.1 * ($i - 1)}) //rotate(0deg) translateY(0px)
+      // transform: translateX(50%) translateY(50%) scale(#{1 - 0.1 * ($i - 1)}) rotate(#{$baseRotate*$i}deg)
+
+@keyframes loadersvg
+  0% 
+    transform: rotate(0deg)
+  100%
+    transform: rotate(360deg)
 
 #loader.loader
   height: 100vh
@@ -48,12 +68,16 @@
   text-align: center
   h1
     text-align: center
-    font-size: 70px
+    font-size: 35px
     font-weight: 100
     letter-spacing: 5px
+    margin-bottom: 30px
 
 .loader__button
   transition: all .4s ease
+  transform: scale(0.8)
+  color: black
+  margin-top: 20px
 
 .loader__button--hidden
   opacity: 0

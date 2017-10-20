@@ -35,6 +35,7 @@
 		&__hide
 			background-image: url("images/menu.svg")
 			background-size: 20px
+			filter: invert(100%)
 		&__display
 			background-image: url("images/close.svg")
 			background-size: 20px
@@ -42,6 +43,7 @@
 	.control-group
 		background-color: white
 		color: black
+		width: 260px
 		border: 2px solid black
 		border-radius: 5px
 		padding: 15px
@@ -53,7 +55,7 @@
 		&__display
 			transform: translateX(0px)
 			opacity: 1
-			
+
 		label
 			display: inline-block
 			margin-right: 5px
@@ -65,14 +67,13 @@
 			width: 160px
 			margin: 0
 			float: right
-
-		&[type="text"]
-			width: 30px
-			display: inline-block
-			margin-left: 10px
-			border: 0
-			padding: 5px
-			border-radius: 5px
-			background-color: #222
-			color: white
-			text-align: center
+			&[type="text"]
+				width: 30px
+				display: inline-block
+				margin-left: 10px
+				border: 0
+				padding: 5px
+				border-radius: 5px
+				background-color: #222
+				color: white
+				text-align: center

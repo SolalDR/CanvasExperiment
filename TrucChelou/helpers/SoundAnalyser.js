@@ -6,6 +6,8 @@ function SoundAnalyser(sources, args){
 	this.buffers = [];
     this.currentBuffer = null;
 	this.gain = this.ctx.createGain();
+    this.gain.gain.minValue = 0;
+    this.gain.gain.maxValue = 1;
 	this.echantillon = 50;
 	this.frequencyData = new Uint8Array(this.analyser.frequencyBinCount);
 	this.easeAverage = 0;
@@ -17,12 +19,17 @@ function SoundAnalyser(sources, args){
 
 SoundAnalyser.prototype =  {
 
+    // Play the current source and initialize analyser & gain
     playCurrent: function(){
+        this.audio.connect( this.gain );
+        this.gain.connect( this.ctx.destination );
         this.audio.connect( this.analyser )
         this.analyser.connect( this.ctx.destination )
         this.audio.start();
+      
     },
 
+    // Change the song 
     select: function(rank){
         this.currentBuffer = this.buffers[rank]; 
         this.audio.stop();
@@ -31,12 +38,25 @@ SoundAnalyser.prototype =  {
         this.playCurrent();
     },
 
+    // Load the rest of the buffers
     loadBuffers: function(){
         for(i=1; i<this.sources.length; i++) {
             this.load(this.sources[i]);
         }
     },
 
+    // Gain manage
+    mute: function(){
+        this.oldGain = this.gain.gain.value;
+        this.gain.gain.value = -1;
+        console.log('Mute')
+    },
+    sound: function(){
+        this.gain.gain.value = 1;
+        console.log('Sound')
+    },
+
+    // Load a new source
 	load: function(source){
 		var self = this;
 		var request = new XMLHttpRequest();
@@ -53,6 +73,7 @@ SoundAnalyser.prototype =  {
             if( self.currentBuffer === null ) {
                 self.currentBuffer = buffer;
                 self.audio = self.ctx.createBufferSource();
+                self.audio.connect( self.gain )
                 self.audio.buffer = self.currentBuffer;
                 // self.playCurrent();
                 self.loadBuffers();
@@ -66,13 +87,13 @@ SoundAnalyser.prototype =  {
         request.send();
     },
 
+    // Kick manage
     addKick: function(value){
     	this.kicks.push({
     		value: value,
     		name: name
     	})
     },
-
     hasKicked: function(kick, value){
     	if( kick < value ) {
     		return true;
@@ -80,11 +101,13 @@ SoundAnalyser.prototype =  {
     	return false;
     },
 
+    // Get all the frequencies 
     getFrequencies: function(){
     	this.analyser.getByteFrequencyData(this.frequencyData);
     	return this.frequencyData
     },
 
+    // Get the frequencies with a reduce sample
     getFrequenciesUsed: function(){
     	this.getFrequencies();
     	var frequences = [];
@@ -97,17 +120,7 @@ SoundAnalyser.prototype =  {
     	return frequences;
     },
 
-    getEaseFrequency: function(ease) {
-    	var freqs = this.getFrequenciesUsed();
-    	var cumul = 0;
-    	for(i=0; i<freqs.length; i++){
-    		cumul+= freqs[i];
-    	}
-    	this.average = cumul/freqs.length; 
-    	this.easeAverage += (this.average - this.easeAverage) * ease;  //cumul/freqs.length
-    	return this.easeAverage;
-    },
-
+    // Return the frequencies's average
     getAverageFrequency: function() {
     	var freqs = this.getFrequenciesUsed();
     	var cumul = 0;
@@ -115,5 +128,17 @@ SoundAnalyser.prototype =  {
     		cumul+= freqs[i];
     	}
     	return cumul/freqs.length;
+    },
+
+    // getAverageFrequency with ease 
+    getEaseFrequency: function(ease) {
+        var freqs = this.getFrequenciesUsed();
+        var cumul = 0;
+        for(i=0; i<freqs.length; i++){
+            cumul+= freqs[i];
+        }
+        this.average = cumul/freqs.length; 
+        this.easeAverage += (this.average - this.easeAverage) * ease;  //cumul/freqs.length
+        return this.easeAverage;
     }
 }
